@@ -12,7 +12,7 @@ const composer = new Composer();
 
 export default composer;
 
-composer.command(["search", "find"], async ctx => {
+composer.command(["play", "p"], async ctx => {
     if (searches.has(ctx.chat.id)) {
         await ctx.reply(i18n("search_active"));
         return;
@@ -27,7 +27,7 @@ composer.command(["search", "find"], async ctx => {
 
     const results = (
         await ytsr(query, {
-            limit: 10,
+            limit: 6,
             requestOptions: { headers: { Cookie: env.COOKIES } },
         })
     ).items.filter(v => v.type == "video") as (Item & { type: "video" })[];
@@ -52,7 +52,6 @@ composer.command(["search", "find"], async ctx => {
                 durationEmoji: result.isLive ? "🔴" : "🕓",
                 duration: result.isLive ? "Live" : result.duration || "N/A",
                 views: result.views ? humanize(result.views) : "N/A",
-                uploadTime: result.uploadedAt || "N/A",
                 uploader: result.author?.name || "N/A",
             }) + "\n\n";
     }
